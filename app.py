@@ -1,77 +1,76 @@
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import os
 import requests
+import secrets
+from datetime import timedelta
 
 app = Flask(__name__)
 
 # Defina a chave secreta para a sessão
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')
+app.permanent_session_lifetime = timedelta(minutes=30)  # Sessão expira em 30 minutos
 
-# URL do Firebase (base da URL do banco de dados)
+# URL do Firebase
 link = 'https://princi-4dfd7-default-rtdb.firebaseio.com/'
-
 
 # Função para proteger as rotas
 def proteger_rota(f):
     def wrap(*args, **kwargs):
-        if 'usuario' not in session:
-            session['redirectTo'] = request.url 
-            return redirect(url_for('index'))  # Redireciona para a página de login se não estiver logado
+        if 'usuario' not in session or 'token' not in session:
+            session['redirectTo'] = request.url
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     wrap.__name__ = f.__name__
     return wrap
 
-# Rota inicial (Página de Login)
+# Página inicial (login)
 @app.route('/')
 def index():
+    if 'usuario' in session and 'token' in session:
+        return redirect(url_for('operador'))
     return render_template('index.html')
 
-# Rota para pegar dados do Firebase (apenas exemplo)
+# Rota para buscar dados no Firebase (exemplo)
 @app.route('/dados')
 def dados():
-    response = requests.get(f"{link}/dados.json")  # URL do banco de dados + endpoint
-    data = response.json()  # Parse da resposta JSON
-    return str(data)  # Retorna os dados em formato de string
+    response = requests.get(f"{link}/dados.json")
+    data = response.json()
+    return str(data)
 
-# Rota de login
-@app.route('/login', methods=['POST'])
+# Login
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.get_json()  # Recebe os dados JSON do frontend
-    usuario = data.get('usuario')
-    senha = data.get('senha')
+    if request.method == 'POST':
+        data = request.get_json()
+        usuario = data.get('usuario')
+        senha = data.get('senha')
 
-    # Conectar ao Firebase e verificar dados do usuário
-    response = requests.get(f"{link}/usuarios/{usuario}.json")  # Obtém os dados do usuário pelo ID (email)
-    
-    # Verifica se o Firebase retornou dados para o usuário
-    if response.status_code != 200:
-        return {'success': False, 'message': 'Erro ao acessar o banco de dados'}, 500
+        response = requests.get(f"{link}/usuarios/{usuario}.json")
+        if response.status_code != 200:
+            return {'success': False, 'message': 'Erro ao acessar o banco de dados'}, 500
 
-    dados = response.json()
+        dados = response.json()
 
-    # Verifica se o usuário existe e se a senha está correta
-    if dados and dados.get('senha') == senha:
-        session['usuario'] = usuario  # Armazenando o usuário na sessão
-        session['rota'] = dados.get('rota', 'default')  # Armazenando a rota do usuário (por exemplo, 'admin.html')
-        
-        # Calcula a página de redirecionamento
-        redirect_to = session.get('redirectTo', f'/{dados["rota"].replace(".html", "")}')
-        
-        # Limpa a variável de redirecionamento após usá-la
-        session.pop('redirectTo', None)
-        
-        return {'success': True, 'rota': redirect_to}  # Retorna a resposta no formato JSON
-    else:
-        return {'success': False, 'message': 'Usuário ou senha incorretos'}, 401
+        if dados and dados.get('senha') == senha:
+            session.permanent = True
+            session['usuario'] = usuario
+            session['rota'] = dados.get('rota', 'default')
+            session['token'] = secrets.token_hex(16)  # Token aleatório
 
-# Rota para verificar se o usuário está autenticado
-@app.route('/verificar_login')
-def verificar_login():
-    # Verifica se o usuário está autenticado (se a variável de sessão 'usuario' existir)
-    if 'usuario' in session:
-        return jsonify({'autenticado': True})
-    else:
-        return jsonify({'autenticado': False})
+            redirect_to = session.get('redirectTo', f'/{dados["rota"].replace(".html", "")}')
+            session.pop('redirectTo', None)
+
+            return {'success': True, 'rota': redirect_to}
+        else:
+            return {'success': False, 'message': 'Usuário ou senha incorretos'}, 401
+
+    return render_template('index.html')
+
+# Logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 # Rotas protegidas
 @app.route('/operador')
@@ -98,25 +97,6 @@ def juradoB():
 @proteger_rota
 def juradoC():
     return render_template('juradoC.html')
-
-# Rota de logout
-@app.route('/logout')
-def logout():
-    session.clear()  # Limpa todos os dados da sessão
-    return redirect(url_for('index'))  # Redireciona para a página inicial
-
-# Captura todas as outras rotas
-@app.before_request
-def redirecionar_ou_proteger_rota():
-    if 'usuario' not in session:
-        if request.endpoint not in ['index', 'login', 'verificar_login']:
-            session['redirectTo'] = request.url  # Salva a URL original para redirecionar após o login
-            return redirect(url_for('index'))  # Redireciona para o login
-
-# Bloqueia acesso direto aos arquivos .html
-@app.route('/<path:path>.html')
-def redirect_html(path):
-    return redirect(url_for('index'))  # Redireciona para o login se tentar acessar diretamente um arquivo .html
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True, port=5000)

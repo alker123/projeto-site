@@ -46,13 +46,7 @@
 
     <button id="enviar">Enviar Nota</button>
   </div>
-  <script>
-fetch('/verificar_login')
-  .then(res => res.json())
-  .then(data => {
-    if (!data.autenticado) window.location.href = '/';
-  });
-</script>
+ 
 
 
 <script type="module">
