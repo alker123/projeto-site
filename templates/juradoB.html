@@ -46,6 +46,14 @@
 
     <button id="enviar">Enviar Nota</button>
   </div>
+  <script>
+fetch('/verificar_login')
+  .then(res => res.json())
+  .then(data => {
+    if (!data.autenticado) window.location.href = '/';
+  });
+</script>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
