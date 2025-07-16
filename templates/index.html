@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="title">Login</title>
+
+  <!-- Link para o CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+
+  <!-- Scripts do Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <!--<script src="{{ url_for('static', filename='js/firebase1.js') }}"></script>-->
+  <script src="{{ url_for('static', filename='js/translate.js') }}"></script>
+
+</head>
+
+<body>
+  <!-- Imagem centralizada e fixa -->
+  <img id="img-movel" src="{{ url_for('static', filename='imagens/voando alto-psd.png') }}" alt="Logo" draggable="false" />
+
+  <!-- Botões de idioma -->
+  <div class="lang-buttons">
+    <button onclick="setLanguage('pt')">
+      <img src="{{ url_for('static', filename='imagens/br.png') }}" alt="Português" />
+    </button>
+    <button onclick="setLanguage('en')">
+      <img src="{{ url_for('static', filename='imagens/us.png') }}" alt="English" />
+    </button>
+  </div>
+
+  <!-- Área de login -->
+  <div class="login-container">
+    <h2 id="loginTitle">Login</h2>
+    <input type="text" id="usuario" placeholder="Usuário" data-translate-placeholder="username" />
+    <input type="password" id="senha" placeholder="Senha" data-translate-placeholder="password" />
+    <button id="btnLogin">Entrar</button>
+    <p id="mensagem" class="mensagem-erro"></p>
+  </div>
+
+  <script>
+    // Tempo máximo de inatividade (30 minutos)
+const maxInactivityTime = 30 * 60 * 1000; // 1800000 ms
+let inactivityTimer;
+
+// Função para resetar o timer de inatividade
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+        // Redireciona para login após 30 minutos de inatividade
+        window.location.href = "/logout"; // Ou "/login" se preferir
+    }, maxInactivityTime);
+}
+
+// Eventos para detectar atividade do usuário
+['click', 'mousemove', 'keydown', 'scroll'].forEach(evt => {
+    window.addEventListener(evt, resetInactivityTimer);
+});
+
+// Inicia o timer na primeira carga
+resetInactivityTimer();
+  
+
+// Função para verificar se o usuário está autenticado
+function verificarLogin() {
+    fetch('/verificar_login')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.autenticado) {
+                // Se não estiver autenticado, redireciona para o login
+                window.location.href = '/';  // Redireciona para a página index (login)
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao verificar login:', error);
+        });
+}
+
+// Chama a função de verificação quando a página carregar
+window.onload = function() {
+    // Se a URL contiver qualquer uma das páginas protegidas, verifica se o usuário está logado
+    const paginasProtegidas = ['/admin', '/operador', '/juradoA', '/juradoB', '/juradoC'];
+    
+    // Verifica se a URL atual corresponde a uma das páginas protegidas
+    if (paginasProtegidas.some(pagina => window.location.pathname.includes(pagina))) {
+        verificarLogin();
+    }
+};
+
+// Quando o usuário tentar acessar diretamente a página sem estar autenticado
+document.addEventListener('DOMContentLoaded', function() {
+    // Previne o acesso não autorizado nas páginas específicas
+    const paginasProtegidas = ['/admin', '/operador', '/juradoA', '/juradoB', '/juradoC'];
+
+    // Verifica se a URL atual corresponde a uma das páginas protegidas
+    if (paginasProtegidas.some(pagina => window.location.pathname === pagina)) {
+        verificarLogin();
+    }
+});
+
+
+    document.getElementById('btnLogin').addEventListener('click', function(event) {
+        // Prevenir o comportamento padrão (evitar que o botão envie o formulário)
+        event.preventDefault();
+
+        // Capturar os valores dos campos
+        const usuario = document.getElementById('usuario').value;
+        const senha = document.getElementById('senha').value;
+
+        // Verificar se os campos não estão vazios
+        if (!usuario || !senha) {
+            document.getElementById('mensagem').textContent = "Por favor, preencha todos os campos.";
+            return;
+        }
+
+        // Enviar os dados para o Flask via fetch (AJAX)
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ usuario: usuario, senha: senha }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Limpar os campos de usuário e senha após login bem-sucedido
+                document.getElementById('usuario').value = '';
+                document.getElementById('senha').value = '';
+
+                window.location.href = data.rota; // Redireciona para a rota de sucesso
+            } else {
+                document.getElementById('mensagem').textContent = data.message || 'Usuário ou senha incorretos';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            document.getElementById('mensagem').textContent = "Ocorreu um erro, tente novamente.";
+        });
+    });
+
+  </script>
+</body>
+</html>
