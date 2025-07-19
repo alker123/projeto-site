@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Painel do Administrador</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/adminCalculadoraTeclado.css') }}">
@@ -16,11 +17,11 @@
 
 </head>
 <body> 
-  <h1>Painel do Administrador</h1>
+  <h1><i class="fas fa-crown"></i> PAINEL DE ADMINISTRAÇÃO </h1>
 
   
  <!-- Cadastrar Usuário -->
-  <h2>Cadastrar Usuário</h2>
+  <h2><i class="fas fa-user-shield"></i> Cadastrar Usuário</h2>
   <label for="novo-user-nome">Usuário</label>
   <input type="text" id="novo-user-nome" placeholder="Digite o nome do usuário" />
 
@@ -32,18 +33,18 @@
     <label for="mostrar-senha" class="mostrar-senha-label">Mostrar senha</label>
   </div>
 
-  <button id="cadastrar-usuario-btn">Cadastrar Usuário</button>
+  <button id="cadastrar-usuario-btn"><i class="fas fa-save"></i> Cadastrar Usuário</button>
   
 
   <!-- Adicionar Atleta -->
   <div class="card" id="bloco-atleta">
-  <h2>Adicionar Atleta</h2>
+  <h2><i class="fas fa-running"></i> Adicionar Atleta</h2>
   <label for="nome-atleta">Nome do Atleta</label>
   <input type="text" id="nome-atleta" placeholder="Digite o nome">
 
   <hr class="divisor-sessao">
   
-  <h2>Adicionar Categoria</h2>
+  <h2><i class="fas fa-tags"></i> Adicionar Categoria</h2>
   <label for="nome-categoria">Nome da Categoria</label>
   <input type="text" id="nome-categoria" placeholder="Digite a categoria" />
 
@@ -53,7 +54,7 @@
       <input type="file" id="inputFoto" accept="image/*">
   </div>
   
-  <button id="add-categoria-btn">Enviar</button>
+  <button id="add-categoria-btn"><i class="fas fa-paper-plane"></i> Enviar</button>
   </div>
     
   <!-- Teclado Virtual -->
@@ -74,26 +75,26 @@
   
   <!-- Ver e excluir atletas -->
   <div class="card" id="card-atletas">
-    <h2>Atletas Cadastrados</h2>
+    <h2><i class="fas fa-user-times"></i> Excluir Atleta</h2>
     <select id="lista-categorias-2">
       <option value="" disabled selected>Selecionar categoria</option>
     </select>
     <select id="lista-atletas" multiple></select>
-    <button id="excluir-atleta-btn">Excluir Atleta(s)</button>
+    <button id="excluir-atleta-btn"><i class="fas fa-trash-alt"></i> Excluir</button>
   </div>
 
   <!-- Ver e excluir categorias -->
   <div class="card" id="cat">
-    <h2>Categorias Cadastradas</h2>
+    <h2><i class="fas fa-tag"></i> Excluir Categoria</h2>
     <select id="lista-categorias" multiple>
       <option value="" disabled>Selecionar categoria</option>
     </select>
-    <button id="excluir-categoria-btn">Excluir Categoria(s)</button>
+    <button id="excluir-categoria-btn"><i class="fas fa-trash-alt"></i> Excluir</button>
   </div>
 
   <!-- Enviar para Operador -->
  <div class="card" id="oper">
-  <h2>Enviar para Operador</h2>
+  <h2><i class="fas fa-rocket"></i> Enviar para Operador</h2>
 
   <!-- Seleção de Atletas -->
   <label for="atleta-operador">Atletas (selecione um ou mais)</label>
@@ -112,7 +113,7 @@
   </div>
 
   <!-- Botão para Enviar -->
-  <button id="enviar-operador-btn">Enviar para Operador</button>
+  <button id="enviar-operador-btn"><i class="fas fa-paper-plane"></i> Enviar para Operador</button>
 </div>
 
 

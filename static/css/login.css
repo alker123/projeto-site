@@ -9,23 +9,63 @@ body {
   justify-content: center;
   height: 100vh;
   margin: 0;
-  color: #e5b113;
+  color: #e80909;
   padding: 40px;
   min-height: 100vh;
   margin: 0;
 }
+/* Estilo para os alertas */
+.alert {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  display: none; /* Inicialmente invisível */
+}
+
+.alert-success {
+  color: #3bdc0f;  /* Texto verde */
+}
+
+.alert-error {
+  color: #f44336;  /* Texto vermelho */
+}
+
+.alert-warning {
+  color: #f37209;  /* Texto laranja*/
+}
+
 
 .login-container {
-  width: 420px;
+  width: 100%;
+  max-width: 300px;
   background: transparent;
-  border: 2px solid rgba(161, 107, 8, 0.593);
+  border: 2px solid rgba(161, 107, 8, 0.5);
   border-radius: 10px;
   color: #e5b113;
- /* padding: 30px 5px;*/
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 12px; /* MENOR padding */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   text-align: center;
+}
+
+
+
+.login-header {
+  margin-bottom: 10px;
+}
+
+.login-header h1 {
+  color: #d58e09;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  top: 40px !important;
+}
+
+.login-header p {
+  color: #fff;
+  font-size: 0.8em;
+  top: 50px !important;
 }
 
 input[type="text"],
@@ -88,10 +128,10 @@ button:hover {
 
 #img-movel {
   position: absolute;
-  top: 20px !important;
+  top: 8px !important;
   left: 50%;
   transform: translateX(-50%);
-  width: 600px !important;     /* Força tamanho maior */
+  width: 450px !important;     /* Força tamanho maior */
   max-width: 95vw;
   height: auto;
   user-select: none;
@@ -100,54 +140,104 @@ button:hover {
   cursor: default;
   z-index: 1000;
 }
+.footer {
+  display: block;
+  margin: 15px auto;
+  padding: 5px;
+  width: 250px;
+  border-top: 1px solid #d58e09;
+  color: #999;
+  font-size: 14px;
+}
+        
+ /* Estilo para a hora */
+        
+#clock {
+  margin-top: 20px;             /* Espaço acima */
+  text-align: center;           /* Centraliza o conteúdo interno */
+  display: flex;
+  justify-content: center;      /* Centraliza horizontalmente */
+  align-items: center;          /* Alinha verticalmente os itens */
+  font-size: 12px;
+  color: #fff;
+  background: transparent;
+  border: none;
+}
+#current-time {
+  margin-right: 5px;
+}
+#clock-msg {
+  font-weight: normal;
+}
 
 
-
-
-/* ✅ Responsivo para celular */
 @media (max-width: 600px) {
   body {
-    padding: 10px;
+    padding: 5px;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
   }
-#img-movel {
-    position: absolute;
-    top: 70px !important; /* antes era 30px – agora sobe a imagem */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    max-width: 300px !important;
-    cursor: grab;
+
+  #img-movel {
+    top: 70px !important; /* Antes era 40px */
+    width: 160px;
+    max-width: 60vw !important;
   }
+
   .login-container {
-    padding: 20px 15px;
-    width: 95vw;
-    max-width: 100%;
+    margin-top: 170px !important; /* Antes era 140px */
+    width: 80vw;
+    max-width: 280px;
+    padding: 10px;
     box-sizing: border-box;
+  }
+
+  .login-header h1 {
+    font-size: 1.2em;
+    margin-bottom: 6px;
+  }
+
+  .login-header p {
+    font-size: 0.75em;
+    margin-bottom: 8px;
   }
 
   input[type="text"],
   input[type="password"] {
-    width: 95%;
-    max-width: 350px;
+    width: 90%;
+    padding: 6px;
+    font-size: 13px;
+    margin: 8px auto;
+    display: block;
   }
 
   button {
-    width: 60%;
-    max-width: 200px;
-    margin: 20px auto 0;
+    width: 90%;
+    padding: 8px;
+    margin-top: 12px;
+    font-size: 14px;
   }
 
-  .lang-buttons {
-  display: flex;
-  justify-content: center;
-  gap: -5px; /* 👈 Diminui o espaço entre as bandeiras */
-  margin-bottom: 15px;
-  margin-top: -5px;
+ .footer {
+  width: 60% !important;        /* Reduz a largura da linha */
+  margin: 20px auto 0 auto !important; /* Centraliza no celular */
+  border-top: 1px solid rgba(225, 152, 15, 0.864); /* Linha amarela */
+  padding-top: 8px;
+  font-size: 11px;
+  text-align: center;
 }
 
 
+  .lang-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important; /* Alterado para dar respiro entre logo e bandeiras */
+  }
+
   .lang-buttons img {
-    width: 28px;
-    height: 18px;
+    width: 24px !important;
+    height: 16px !important;
   }
 }

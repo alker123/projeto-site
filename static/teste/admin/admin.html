@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração Elite</title>
+   
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">-->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@700&display=swap" rel="stylesheet">
+ 
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/adminCalculadoraTeclado.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/adminMobile.css') }}" media="only screen and (max-width: 600px)">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+</head>
+
+<body>
+    <h1><i class="fas fa-crown"></i> PAINEL DE ADMINISTRAÇÃO ELITE</h1>
+
+    <div class="main-container">
+        <!-- COLUNA 1 -->
+        <div class="left-column">
+            <!-- Card Cadastrar Usuário -->
+            <div class="card">
+                <h2><i class="fas fa-user-shield"></i> Cadastrar Usuário</h2>
+                <label for="novo-user-nome">Nome do Usuário:</label>
+                <input type="text" id="novo-user-nome" placeholder="Digite o nome do usuário">
+                <label for="novo-user-senha">Senha:</label>
+                <input type="password" id="novo-user-senha" placeholder="Digite a senha">
+                <button id="mostrar-senha" onclick="togglePasswordVisibility()">👁️ Mostrar Senha</button>
+                <button id="cadastrar-usuario-btn"><i class="fas fa-save"></i> Cadastrar</button>
+            </div>
+
+            <!-- Card Excluir Atleta -->
+            <div class="card">
+                <h2><i class="fas fa-user-times"></i> Excluir Atleta</h2>
+                <label for="select-atleta-excluir">Selecionar Atleta:</label>
+                <select id="select-atleta-excluir">
+                    <option value="">Selecione um atleta</option>
+                </select>
+                <button class="delete-btn"><i class="fas fa-trash-alt"></i> Excluir</button>
+            </div>
+        </div>
+
+        <!-- COLUNA 2 (Envia para Operador) -->
+        <div class="center-column">
+            <!-- Card Enviar para Operador -->
+            <div class="card">
+                <h2><i class="fas fa-rocket"></i> Enviar para Operador</h2>
+                <label for="atleta-operador">Selecionar Atleta:</label>
+                <select id="atleta-operador">
+                    <option value="">Selecione um atleta</option>
+                </select>
+                <label for="categoria-operador">Selecionar Categoria:</label>
+                <select id="categoria-operador">
+                    <option value="">Selecione uma categoria</option>
+                </select>
+                <button id="enviar-operador-btn"><i class="fas fa-paper-plane"></i> ENVIAR</button>
+            </div>
+        </div>
+
+        <!-- COLUNA 3 -->
+        <div class="right-column">
+            <!-- Card Adicionar Atleta -->
+            <div class="card">
+                <h2><i class="fas fa-running"></i> Adicionar Atleta</h2>
+                <label for="nome-atleta">Nome do Atleta:</label>
+                <input type="text" id="nome-atleta" placeholder="Digite o nome do atleta">
+                
+                <!-- Campo Categoria -->
+                <label for="categoria-atleta">Categoria:</label>
+                <select id="categoria-atleta">
+                    <option value="">Selecione uma categoria</option>
+                </select>
+                
+                <!-- Campo Foto -->
+                <label for="foto-atleta">Foto do Atleta:</label>
+                <input type="file" id="foto-atleta" accept="image/*">
+                <label for="foto-atleta" class="upload-label">📷 Adicionar Foto</label>
+                
+                <button id="add-atleta-btn"><i class="fas fa-plus"></i> Adicionar</button>
+            </div>
+
+            <!-- Card Excluir Categoria -->
+            <div class="card">
+                <h2><i class="fas fa-tag"></i> Excluir Categoria</h2>
+                <label for="select-categoria-excluir">Selecionar Categoria:</label>
+                <select id="select-categoria-excluir">
+                    <option value="">Selecione uma categoria</option>
+                </select>
+                <button id="excluir-categoria-btn" class="delete-btn"><i class="fas fa-trash-alt"></i> Excluir</button>
+            </div>
+        </div>
+    </div>
+     
+    <script type="module" src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/adminSenhaUsuario.js') }}"></script>
+<script src="{{ url_for('static', filename='js/adminTeclado.js') }}"></script>
+
+   
+</body>
+</html>
